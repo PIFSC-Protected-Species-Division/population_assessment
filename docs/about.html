@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>About – population_assessment</title>
+<title>Introduction – population_assessment</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,41 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -103,6 +68,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -130,7 +124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./about.html" aria-current="page"> 
-<span class="menu-text">About</span></a>
+<span class="menu-text">Introduction</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -143,15 +137,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#population-assessments" id="toc-population-assessments" class="nav-link active" data-scroll-target="#population-assessments">Population assessments</a>
+  <ul class="collapse">
+  <li><a href="#conceptual-framework" id="toc-conceptual-framework" class="nav-link" data-scroll-target="#conceptual-framework">Conceptual Framework</a></li>
+  <li><a href="#methods-outline" id="toc-methods-outline" class="nav-link" data-scroll-target="#methods-outline">Methods Outline</a>
+  <ul class="collapse">
+  <li><a href="#imputing-monthly-nest-counts" id="toc-imputing-monthly-nest-counts" class="nav-link" data-scroll-target="#imputing-monthly-nest-counts">1. Imputing monthly nest counts</a></li>
+  <li><a href="#trend-analysis-retrospective" id="toc-trend-analysis-retrospective" class="nav-link" data-scroll-target="#trend-analysis-retrospective">2. Trend analysis (retrospective)</a></li>
+  <li><a href="#trend-analysis-future-projections" id="toc-trend-analysis-future-projections" class="nav-link" data-scroll-target="#trend-analysis-future-projections">3. Trend analysis: future projections</a></li>
+  <li><a href="#incorporating-fishery-interactions-into-the-model" id="toc-incorporating-fishery-interactions-into-the-model" class="nav-link" data-scroll-target="#incorporating-fishery-interactions-into-the-model">4. Incorporating fishery interactions into the model</a></li>
+  <li><a href="#modeling-assumptions" id="toc-modeling-assumptions" class="nav-link" data-scroll-target="#modeling-assumptions">5. Modeling assumptions</a></li>
+  <li><a href="#conservation-implications" id="toc-conservation-implications" class="nav-link" data-scroll-target="#conservation-implications">6. Conservation implications</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
+<h1 class="title">Introduction</h1>
 </div>
 
 
@@ -168,17 +180,168 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>About this site</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<section id="population-assessments" class="level1">
+<h1>Population assessments</h1>
+<p><strong>Population viability analysis (PVA)</strong> is a conservation tool used to help managers assess extinction risk and guide policy decisions. PVA is mathematical model that uses demographic and life history data to predict the long-term trend of a population, and its sensitivity to changes in life history parameters or environmental stochasticity. This allows users to assess the long-term impact of current threats, such as fisheries bycatch, or conservation actions, such as nesting beach protections.</p>
+<section id="conceptual-framework" class="level2">
+<h2 class="anchored" data-anchor-id="conceptual-framework">Conceptual Framework</h2>
+<p>PVA combines two primary components:</p>
+<ol type="1">
+<li><strong>Retrospective fitting:</strong> Estimating historical trends and current nesting female abundance based on empirical data.</li>
+<li><strong>Future projections:</strong> A simulation approach to evaluate projections against abundance thresholds (the probability of falling below either 50%, 25%, or 12.5% of the current population size).</li>
+</ol>
+</section>
+<section id="methods-outline" class="level2">
+<h2 class="anchored" data-anchor-id="methods-outline">Methods Outline</h2>
+<p>This assessment was performed in a <strong>Bayesian framework</strong> with four main components: nesting data imputation, nesting trend analysis, population viability analysis, and incorporation of fishery take into the PVA (the “take model” component). The Bayesian framework is a statistical method for combining a prior probability (existing knowledge) with new data (likelihood) to produce a revised posterior probability. Instead of using just a single estimate for a PVA, it provides a posterior distribution that quantifies the uncertainty of parameters.</p>
+<section id="imputing-monthly-nest-counts" class="level3">
+<h3 class="anchored" data-anchor-id="imputing-monthly-nest-counts">1. Imputing monthly nest counts</h3>
+<p>Some months were missing from the leatherback dataset, so we used a Bayesian hierarchical model to impute the missing monthly nest counts. This assumes that the dataset contains observed nests, but these values do not fully capture the true number of nests, as not all nests were observed. The relationship between the monthly nest counts recorded on the beach in natural log space (<span class="math inline">\(\text{y}_{t,m}\)</span>) and the natural log of the true number of nests <span class="math inline">\(\text{X}_{t,m}\)</span> will be explained below:</p>
+<p>We model the natural logarithm (natural log) of monthly counts at a nesting beach as an auto-regressive model. <span class="math display">\[
+\text{u}_{t,m} = \text{s}_{t,m} + \text{X}_{t-1,m-1}
+\]</span> <span class="math inline">\(\text{u}_{t,m}\)</span> is the mean of the natural log of the true number of nests at time <span class="math inline">\(t\)</span> of month <span class="math inline">\(m\)</span>, <span class="math inline">\(\text{s}_{t,m}\)</span> is the “slope” parameter at time <span class="math inline">\(t\)</span>, which is defined by month (<span class="math inline">\(m\)</span> = 1 to 12). <span class="math inline">\(\text{X}_{t-1,m}\)</span> is the natural log of the true nest count at time <span class="math inline">\(t - 1\)</span>. While month index <span class="math inline">\(m\)</span> corresponds to sequential months in each nesting season (e.g.&nbsp;months 1 through 12), the time index starts at the first month of the time series and increases monthly throughout all years in the time series.</p>
+<p>The state-space <span class="math inline">\(\text{X}_{t,m}\)</span> is modeled with a normal distribution with the mean <span class="math inline">\(\text{u}_{t,m}\)</span> and standard deviation <span class="math inline">\(\sigma_X\)</span>, which was assumed to be constant over time. <span class="math display">\[
+\text{X}_{t,m} \text~N(\text{u}_{t,m},\sigma_X)
+\]</span> Observations <span class="math inline">\(\text{y}_{t,m}\)</span> are modeled with another normal distribution with standard deviation <span class="math inline">\(\sigma_y\)</span>. also assumed to be constant over time. <span class="math display">\[
+\text{y}_{t,m} \text~N(\text{X}_{t,m},\sigma_y)
+\]</span> The slope <span class="math inline">\(\text{s}_{t,m}\)</span> parameters are modeled with the discrete Fourier series y acknowledging the periodicity of nesting. For Jamursba Medi, a 12-month period captures the single summer peak in nesting, whereas the summer and winter peaks of nesting in Wermon are captured by a 6-month period. <span class="math display">\[
+\text{s}_{t,m} = \beta_1 * cos(2\pi(\frac{m}{period})) + \beta_2 * sin(2\pi(\frac{m}{period})
+\]</span> The two coefficients (<span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>) were estimated from the data. The annual number of nests for each season (April through March; <span class="math inline">\(X_T\)</span>) are computed as the sum of estimated true monthly log numbers of nests (<span class="math inline">\(\text{X}_{t,m}\)</span>), derived from imputed log observed nest counts (<span class="math inline">\(\text{y}_{t,m}\)</span>). <span class="math display">\[
+X_T = \sum{exp(\text{X}_{.,m}})
+\]</span> <span class="math inline">\(\text{X}_{.,m}\)</span> indicates all <span class="math inline">\(t\)</span> values from <span class="math inline">\(m\)</span> = 1 to <span class="math inline">\(m\)</span> = 12.</p>
+<p>Prior distributions for the parameters are not flat but with large uncertainties in the natural log space. Normal distributions with mean = 0 and variance = 1 are used for the two parameters for the Fourier discrete function (<span class="math inline">\(\beta_1, \beta_2\)</span>), whereas gamma distributions with the shape parameter = 2 and rate parameter = 0.5 are used for the standard deviation parameters for the process (<span class="math inline">\(\sigma_X\)</span>) and observation (<span class="math inline">\(\sigma_y\)</span>) models.</p>
+</section>
+<section id="trend-analysis-retrospective" class="level3">
+<h3 class="anchored" data-anchor-id="trend-analysis-retrospective">2. Trend analysis (retrospective)</h3>
+<p>Population growth rates are estimated using a stochastic density-independent exponential growth model applied to nest count data (Boyd et al.&nbsp;2017<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, Holmes et al.&nbsp;(2007)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. <span class="math display">\[
+N_j = \text{N}_{j-1}e^r
+\]</span> <span class="math inline">\(N_j\)</span> is the number of Annual Nesters in the year <span class="math inline">\(j\)</span>, <span class="math inline">\(r\)</span> is the instantaneous population growth rate (i.e.&nbsp;long-term annual trend), and <span class="math inline">\(e^r\)</span> = <span class="math inline">\(\lambda\)</span> (i.e., “lambda”, the finite rate of increase for the population).</p>
+<p>This model is common for long-lived, slow-growing, late-maturing species such as sea turtles, whose populations have been depleted to relatively low levels. The assumption of density-independence could be evaluated in future by running a density-dependent model (e.g.&nbsp;Gompertz model), which would allow the population to reach carrying capacity at some point in the future.</p>
+<p>The data inputs to the model were the time series of Annual Nesters, or the number of females arriving on a beach to nest each year. These were derived from observed nest counts, by dividing each nest count by mean clutch frequency (i.e.&nbsp;the mean number of clutches per nesting female in a nesting season). This static conversion does not affect the estimation process, but puts results into management-relevant terms. The number of Annual Nesters summed across one remigration interval (i.e.&nbsp;the number of years between nesting events of the same female) yields a snapshot of the Total Nesters in the population.</p>
+<p>The trend estimates here are better interpreted as long-term annual trends in the number of nesters, rather than the true population growth rates. This is because the model relies exclusively on nest count data, nesters only represent a small portion of the total population that includes males and immature turtles of both sexes, and assuming true population growth rates would require the assumption of a stable age distribution, for which no data exists.</p>
+<p>The exponential growth rate was transformed into natural log space and solved for the population growth rate: <span class="math display">\[
+ln(N_j) = ln(\text{N}_{j-1}) + r
+\]</span> <span class="math display">\[
+r = ln(N_j) - ln(\text{N}_{j-1})
+\]</span> Following Boyd et al.&nbsp;(2017)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, we construct a Bayesian state-space model (BSSM) from the natural log version of the exponential population growth equation. The BSSM allows for estimation of process variation (i.e., environmental and demographic variability) and observation uncertainty (i.e., imperfect data collection) and provides posterior distributions (i.e., parameter estimates with probability distributions) which are useful for conveying uncertainty in management applications.</p>
+<p>There are two major components of the BSSM: the process model describing the true number of nesting females each year, and the observation model relating the observed count data to the true number of nesting females. Three parameters are estimated: <span class="math inline">\(r\)</span>, the instantaneous population growth rate, <span class="math inline">\(Q\)</span>, the process error variance, and <span class="math inline">\(R\)</span>, the observation error variance. The model also provides a predicted count with a probability distribution for each year of observed data. The predicted value for the final year of observed data is then used as a starting point for future projections.</p>
+<p><span class="math display">\[
+\text{Process equation:}\quad {T_j = \text{T}_{j-1} + r + p_j} \quad \text{where}\; p_j \,\text ~\, N(0,Q)
+\]</span> Where <span class="math inline">\(T_j\)</span> is the natural log of the true number of annual nesters in year <span class="math inline">\(j\)</span>, <span class="math inline">\(r\)</span> is the instantaneous population growth rate, <span class="math inline">\(p_j\)</span> is the process error at year <span class="math inline">\(j\)</span>, and <span class="math inline">\(Q\)</span> is the state process (time invariant). The true state variable, <span class="math inline">\(T_j\)</span> is not directly measured for the MP loggerheads nor WP leatherbacks. Instead, nest counts are observed on multiple beaches for each population, and the resulting time series come with various forms of observation uncertainty (i.e., missed nests or falsely identified nests). The relationship between the observed data and the corresponding number of true Annual Nesters is defined by a second equation: <span class="math display">\[
+\text{Observation equation:}\quad {B_j = T_j + o_j} \quad \text{where}\; o_j \,\text ~\, N(0,R)
+\]</span> where <span class="math inline">\(B_j\)</span> is the natural log of the observed nesters, <span class="math inline">\(o_j\)</span> is the observation error at year <span class="math inline">\(j\)</span>, and <span class="math inline">\(R\)</span> is the variance of the observation process (time invariant).</p>
+<p>For both NP loggerheads and WP leatherbacks, we define the model to only have one population with multiple time series of observations (i.e., multiple beaches).This structure best represents the known population dynamics of genetic similarity and exchange of individuals across the studied beaches.</p>
+<p>However, the basic model can be expanded to accommodate multiple state vectors, representing several populations and multiple time series (Hinrichsen and Holmes 2009<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>): <span class="math display">\[
+\text{Process equation:}\quad {T_j = \text{T}_{j-1} + r + p_j} \quad \text{where}\; p_j \,\text ~\, MVN(0,Q_j)
+\]</span> <span class="math display">\[
+\text{Observation equation:}\quad {B_j = Z +T_j + a + o_j} \quad \text{where}\; o_j \,\text ~\, MVN(0,R_j)
+\]</span> where <span class="math inline">\(Q_j\)</span> is the process variance-covariance matrix, <span class="math inline">\(R_j\)</span> is the observation variance-covariance matrix, <span class="math inline">\(Z\)</span> is a matrix that maps sets of time series to the set of state vectors, and <span class="math inline">\(a\)</span> is a vector of scaling parameters. The multivariate setting would allow the analysis of each time series as an individual population.</p>
+<p>Posterior distributions of the model parameters are numerically derived using Markov chain Monte Carlo (MCMC) simulation in JAGS (Plummer, 2003<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>; 2017<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>).The MCMC simulations are based on 10,000 samples of 2 chains. Every other sample was retained to reduce auto-correlation, and the first 1000 samples of each chain were discarded as burn-in.</p>
+<p>From the model outputs, we are most interested in <span class="math inline">\(r\)</span>, the annual population growth rate, <span class="math inline">\(Q\)</span>, the process variance, and <span class="math inline">\(\text{T}_{final}\)</span>, the estimated true log Annual Nesters for the final year of observed data. Posterior distributions of Annual Nesters for the final found years of data are used to estimate current abundance: <span class="math display">\[
+\text{N}_{current} = \frac{RI * (e^{\text{T}_{final}})+(e^{\text{T}_{final-1}})+(e^{\text{T}_{final-2}})+(e^{\text{T}_{final-3}})}{4}
+\]</span> where <span class="math inline">\(RI\)</span> is the remigration interval for the population and <span class="math inline">\(\text{N}_{final}\)</span> is the median Annual Nesters estimated for the final year of data, <span class="math inline">\(\text{N}_{final-1}\)</span> is for the second to final year of data, and so on. This serves as a snapshot of Total Reproductive Females in the population, and assumes no mortaily of adults females during the <span class="math inline">\(RI\)</span> period.</p>
+</section>
+<section id="trend-analysis-future-projections" class="level3">
+<h3 class="anchored" data-anchor-id="trend-analysis-future-projections">3. Trend analysis: future projections</h3>
+<p>PVA projections use a simulation approach with 10,000 runs for each species. Each projection is initialized in its starting year with a paired draw from the MCMC samples (joint posterior distribution) for (1) Annual Nesters (<span class="math inline">\(N_0\)</span> = <span class="math inline">\(\text{N}_{final}\)</span>), (2) instantaneous population growth rate (<span class="math inline">\(r\)</span>), (3) process error variance (<span class="math inline">\(Q\)</span>) from the final data year of the historic trend analysis. For each subsequent year in the projection, a new <span class="math inline">\(r\)</span> and <span class="math inline">\(Q\)</span> are drawn as pairs from the MCMC samples to make the projections dynamic. Pulling paired draws from the MCMC samples reflects the inter-annual variation in the biology of the species, but also constrains parameter values to realistic combinations and therefore keeps the uncertainty in the projections reasonable.</p>
+<p>Projections can be evaluated against abundance thresholds. Here, the probability of falling below 50%, 25%, and 12.5% of current population size (<span class="math inline">\(N_0\)</span>) is calculated at 5, 10, 25, 50, and 100-year time steps by summing the number of projections below the thresholds at the given time step and dividing by the total number of projections (10,000). Mean, median, and 95% confidence limits of number of years to reach the threshold are calculated for simulations that fall below a given population threshold, and the 100-year timestep simulation.</p>
+</section>
+<section id="incorporating-fishery-interactions-into-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="incorporating-fishery-interactions-into-the-model">4. Incorporating fishery interactions into the model</h3>
+<p>In principle, the incorporation of fisheries interactions into the PVA projections is simple: during the calculation of the number of females in the next time step (<span class="math inline">\(\text{N}_{j+1}\)</span>), the number of females in the current time step (<span class="math inline">\(N_j\)</span>) is reduced by the incidental take in the current time step (<span class="math inline">\(F_j\)</span>) and multiplied by the finite population growth rate (<span class="math inline">\(\lambda\)</span>, = <span class="math inline">\(e^r\)</span>). <span class="math display">\[
+\text{N}_{j+1} = (N_j - F_j) * e^r
+\]</span> Therefore, the challenge comes from converting the incidental take of a given species (comprised of various lengths, ages, life stages, and sexes) to adult nester equivalents (ANE).</p>
+<p><strong>1. Predicting anticipated take levels:</strong> The first goal is to generate the number and characteristics of the anticipated turtles that will be taken in each year. The number of turtles is referred to as the anticipated take level (ATL). Each year’s ATL was drawn from a Conway-Maxwell Poisson distribution (CMP), a two-parameter version of the Poisson distributions that includes a scale parameter <span class="math inline">\(\nu\)</span>. <span class="math inline">\(\mu_{s,j}\)</span> is the mean of the CMP distribution, and <span class="math inline">\(s\)</span> is one of three within-year segments which are summed to produce the total annual ATL (McCracken 2018<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>). <span class="math display">\[
+\text{ATL}_{j} \; \text~ \sum^{3}_{s=1}{CMP(\mu_{s,j},\nu_{s,j})}
+\]</span> Each individual in the annual ATL receives (1) a length and fishery mortality from a bivariate normal distribution, (2) a back-calculated age with years until maturity based on a von Bertalanffy growth model, (3) juvenile survival rate, (4) sex, and (5) a remigration interval.</p>
+<p><strong>2. Lengths and fishery mortality.</strong> Based on historic incidental take, a bivariate normal distribution is used to generate lengths in logarithmic space and assign fishery mortality in logit space. <span class="math inline">\(\theta_{L,j}\)</span> is a linear function of the annual incidental take (<span class="math inline">\(F_j\)</span>) with intercept <span class="math inline">\(a_0\)</span> and slope <span class="math inline">\(a_1\)</span>, and <span class="math inline">\(\sum\)</span> is the variance-covariance matrix with variances <span class="math inline">\(\sigma_L^2\)</span> and <span class="math inline">\(\sigma_D^2\)</span> for the log lengths (log(<span class="math inline">\(L_k\)</span>)) and logit assigned fishery mortality (logit(<span class="math inline">\(D_k\)</span>)) to have correlated draws. The parameters of the multivariate normal distribution (<span class="math inline">\(a_0, a_1, \sigma_L, \sigma_D, \rho_{L,D}\)</span>) are solved for in a Bayesian framework using STAN via RStan with 7,500 simulations per chain (5,000 burn-in, 2,500 retained) with 4 chains. <span class="math display">\[
+\left( \frac{log(L_k)}{logit(D_k)} \right) \;\text~MVN\left(\frac{\theta_{L,j}}{\theta_D},\;\scriptstyle\sum\;\right)
+\]</span> <span class="math display">\[
+\theta_{L,j} = a_0 + a_1F_j
+\]</span></p>
+<p><span class="math display">\[
+\scriptstyle\sum = \left[\frac {\sigma_L^2}{}{\rho_{L,d}{}} \right]
+\]</span> <span class="math display">\[
+\Sigma = \begin{pmatrix}
+\mathrm{\sigma_L^2} &amp; \mathrm{{\rho_{L,D}}{\sigma_{L}{\sigma_{D}} \\
+\mathrm{{\rho_{L,D}}{\sigma_L}{\sigma_D}} &amp; \mathrm{\sigma_D^2}
+\end{pmatrix}
+\]</span></p>
+<p><strong>3. Age and stage.</strong> From all lengths of historically taken turtles, a von Bertalanffy growth model (VBGM) is used to calculate the expected length at age across the range of lengths for each species. Using the VBGM for each species, the age at maturity (<span class="math inline">\(A_{mat}\)</span>) was assumed to correspond to a length of 97.5% of the maximum asymptotic maximum length (<span class="math inline">\(L_\infty\)</span>). Turtles with ages less than <span class="math inline">\(A_{mat}\)</span> or lengths less than 97.5% of (<span class="math inline">\(L_\infty\)</span>) are considered immature. Years until maturity are calculated for all turtles as <span class="math inline">\(Y_k = A_{mat} - {A_k}\)</span>, where <span class="math inline">\(A_k\)</span> is the age of the <span class="math inline">\(k\)</span>th individual.</p>
+<p><strong>4. Remigration interval, juvenile survival, and sex.</strong> In deterministic runs, each individual in the anticipated take is assigned the mean remigration interval (<span class="math inline">\(RI\)</span>) and the mean juvenile survival (<span class="math inline">\(\phi\)</span>). In stochastic runs, each individual’s <span class="math inline">\(RI\)</span> is drawn from a distribution (CMP for leatherbacks, truncated normal for loggerheads) and their juvenile survival is drawn from a normal distribution. The sex of each animal is drawn from a Bernoulli distribution for the probability of being female.</p>
+<p><strong>5. ANE calculation.</strong> Adults in the anticipated take are given ANEs of 1. Juvenile ANEs are calculated by projecting the juvenile survival over the number of years to maturity, and dividing by remigration interval. The stochastic nature of sex ratio and fishery mortality are applied to adjust the individual ANE. The probability of an individual taken by a fishery dying is used with a Bernoulli distribution to simulate whether an individual dies. Therefore, the ANE of the <span class="math inline">\(k\)</span>th individual is computed such that when the individual was a juvenile, female, and ended up dying, ANE was defined as the first equation below. However, when the individual was adult and either male or ends up alive, the ANE equals 0.</p>
+<p><span class="math display">\[
+ANE_k = \frac{\phi_J^{Y_k}}{RI}
+\]</span> <span class="math display">\[
+ANE_{realized,k} = \{{{\frac{\phi_J^{Y_k}}{RI}, Stage = J}\atop{1 \times Sex \times Discard, Stage = A}}
+\]</span> <strong>5. Historical ANE imputation.</strong> To account for the historical impact on the population growth rates, ANE is also calculated historically. Each turtle’s length is used to generate a likely age, stage, and years to maturity. Juveniles’ years to maturity are rounded to the nearest year, and adults are assumed to be nesting in the year of their fishery interaction. <span class="math inline">\(Y_F\)</span> is the year incidental take occurred, <span class="math inline">\(Y_k\)</span> is the yeras to maturity, RI is the remigration interval (rounded to 3 years). The survival probability between each nesting year has to be accounted for so that the initial ANE is adjusted, where <span class="math inline">\(\phi_J\)</span> and <span class="math inline">\(\phi_A\)</span> are juvenile and adult survival rates, <span class="math inline">\(PF\)</span> is the proportion females, and <span class="math inline">\(D\)</span> is the assigned fishery mortality. <span class="math display">\[
+Y_{nest,k} = \{{{Y_F+Y_k, y=1}\atop{Y_{nest,k}-1+RI, y&gt;1}}
+\]</span> <span class="math display">\[
+ANE_{k,j} = \{{{{\phi_J^{Nest_1}}\times{PF} \times D_k, y = 1}\atop{{\phi_A^{RI}, y&gt;1}}}
+\]</span> <strong>6. Take calculation.</strong> After converting all individuals to ANEs, take (<span class="math inline">\(F_j\)</span>) from the earlier equation is substituted out for the summation of the individual ANEs in a given year. To account to process variance <span class="math inline">\(Q\)</span> from the trend analysis, the first equation below is modified to draw <span class="math inline">\(N_{j+1}\)</span> from a normal distribution. The modified population growth model presented below is used as the basis for the future projections described above to produce future scenarios with take incorporated. <span class="math display">\[
+\text{N}_{j+1} = (N_j - ANE_{realized,j}) * e^r
+\]</span> <span class="math display">\[
+\text{N}_{j+1} = N((N_j - ANE_{realized,j}) * e^r, Q)
+\]</span></p>
+</section>
+<section id="modeling-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-assumptions">5. Modeling assumptions</h3>
+<p><strong>Imputation:</strong></p>
+<ol type="1">
+<li><p>The true number of nests per month is distributed normally, where the monthly means can be modeled with a discrete Fourier series with a fixed annual frequency. In other words, the number of peaks within a year is constant over the years. The variance around the means is assumed constant over the years.</p></li>
+<li><p>We used an autoregressive model with a lag of one month (AR1 model) where the relationship between the numbers of nests in two months is modeled by the Fourier series. We assume this model sufficiently captures the cyclical nature of nesting throughout the year.</p></li>
+</ol>
+<p><strong>Trend:</strong></p>
+<ol type="1">
+<li><p>The proportion of total nests observed on a given beach is constant through time.</p></li>
+<li><p>The time series of observed number of annual nesters are representative of the populations, as are the population growth rates observed for nesters. Note that index beaches are typically identified for long-term monitoring because they represent the population well.</p></li>
+<li><p>The clutch frequency is constant through time.</p></li>
+<li><p>The population growth rate is density-independent for each species (i.e., no carrying capacity or Allee effects in the timeframe considered).</p></li>
+<li><p>The population growth rate is the same across the different beaches for each species (i.e., there is a single biological process resulting in a single trend).</p></li>
+<li><p>The process and observation variances are estimable (with so few beaches, the prior has a lot of influence).</p></li>
+<li><p>The index beaches in both Japan and Indonesia were observed with constant effort or were effort-corrected by the data collectors prior to being provided to PIFSC to form the time series used in these analyses.</p></li>
+<li><p>The remigration interval is constant through time.</p></li>
+</ol>
+<p><strong>Projections:</strong></p>
+<ol type="1">
+<li>The population will face the same threats in the future as it did in the past. The PVA applies the population growth rate from the past, which was influenced by some particular magnitude of threats, to the future trajectory of the population. It does not account for the impacts of new or increasing threats, such as the loss of nesting habitat from climate change.</li>
+</ol>
+<p><strong>Take model:</strong></p>
+<ol type="1">
+<li><p>The anticipated take level (ATL) is constant through time and independent of fishery effort. This assumption was made by McCracken (2018) when generating the ATLs for the fishery.</p></li>
+<li><p>The distribution of turtles’ sizes and post-interaction mortalities in the past is representative of what will be encountered in the future. We make this assumption when we use the fisheries observer data to inform characteristics of future turtles taken by the fishery, and do so because these are the best available data for the task.</p></li>
+<li><p>The life history parameters are indicative of the populations of interest and are estimated accurately. Specifically, Amat(age at maturity) is 0.975 of Linf (asymptotic length; average length of mature females).</p></li>
+<li><p>Turtles will nest immediately once they reach maturity.</p></li>
+</ol>
+</section>
+<section id="conservation-implications" class="level3">
+<h3 class="anchored" data-anchor-id="conservation-implications">6. Conservation implications</h3>
+<p>We made a number of decisions in the analyses that were inherently conservative for the turtle species in question (i.e., likely inflated the mortality relative to the true). We highlight those here to provide context for interpretation:</p>
+<ol type="1">
+<li><p>We applied the entire anticipated take for the fishery in future years to the index beaches for which we had data; however, those index beaches represent only 52% and 75% of the nesting populations for loggerheads and leatherbacks, respectively. Assessing the impact of the entire take on the index beach populations rather than the full populations is conservative for the species.</p></li>
+<li><p>The Bayesian trend analysis accounts for the parameter uncertainty by incorporating estimated uncertainty of demographic parameters. Consequently, we found large uncertainty around the estimated population growth rate (r), which resulted in greater or lesser chance of recovering than what was found from a frequentist approach. This finding provides an accurate assessment of the projected population given what we know about the population.</p></li>
+<li><p>The anticipated take level is biased high (the CMP distribution tends to draw ATLs that are higher than the take levels observed in previous years).</p></li>
+<li><p>In calculating Adult Nester Equivalents (ANEs) in our historical analysis of fishery impacts (see Historical ANE Imputation), we assume that nesters would have repeatedly returned to nest at a constant remigration interval with an annual probability of survival equal to 0.89 for leatherbacks and 0.90 for loggerheads. However, for loggerheads, Japanese colleagues have indicated that nesters have a relatively low probability of being observed nesting in future years after their initial sighting (approximately 0.30), suggesting potentially high threats in the marine environment. If this is true, then the ANE values in our historical analysis (see Historical ANE Imputation) are inflated compared to the true ANE values (i.e., we added back loggerhead nesters to the population when in reality they had a low chance of surviving to the next nesting season).</p></li>
+</ol>
 
 
+</section>
+</section>
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Boyd, C., D. P. DeMaster, R. S. Waples, E. J. Ward, and B. L. Taylor. 2017. Consistent extinction risk assessment under the US Endangered Species Act. Conservation Letters 10:328-336.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Holmes EE, Sabo JL, Viscido SV, Fagan WF. 2007. A statistical approach to quasi‐extinction forecasting. Ecology Letters. 10(12):1182-1198.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Boyd, C., D. P. DeMaster, R. S. Waples, E. J. Ward, and B. L. Taylor. 2017. Consistent extinction risk assessment under the US Endangered Species Act. Conservation Letters 10:328-336.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Hinrichsen R, Holmes EE. 2009. Using multivariate state-space models to study spatial structure and dynamics. Spatial Ecology.145-166.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Plummer M. 2003. Jags: A program for analysis of bayesian graphical models using Gibbs sampling. Proceedings of the 3rd international workshop on distributed statistical computing. Vienna, Austria.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Plummer M. 2017. Jags version 4.3.0 user manual. http://mcmc-jagssourceforgenet/.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>McCracken ML. 2018. Hawaii permitted shallow-set longline fishery estimated anticipated take level for Endangered Species Act listed species. In: NOAA Fisheries Pacific Islands Science Center, editor. Honolulu, HI USA<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

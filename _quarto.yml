@@ -5,10 +5,10 @@ website:
   title: "population_assessment"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
-
+      - text: "Home"
+        href: index.qmd
+      - text: "Introduction"
+        href: about.qmd
 format:
   html:
     theme:
