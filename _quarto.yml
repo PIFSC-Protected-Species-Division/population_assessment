@@ -2,13 +2,18 @@ project:
   type: website
   output-dir: docs
 website:
-  title: "population_assessment"
-  navbar:
-    left:
-      - text: "Home"
-        href: index.qmd
-      - text: "Introduction"
-        href: about.qmd
+  sidebar:
+    style: "docked"
+    search: true
+    collapse-level: 1
+    contents:
+      - href: index.qmd
+        text: "Home"
+      - href: content/intro.qmd
+        text: "Methods Introduction"
+      - href: content/s1_imputation/imputation.qmd
+        text: "Nest imputation"
+
 format:
   html:
     theme:
