@@ -1,0 +1,7 @@
+[1,"==> quarto preview index.qmd --to html --no-watch-inputs --no-browse\n\n"]
+[1,"pandoc \n  to: html\n  output-file: index.html\n  standalone: true\n  title-prefix: population_assessment\n  section-divs: true\n  html-math-method: mathjax\n  wrap: none\n  default-image-extension: png\n  css:\n    - styles.css\n  toc: true\n  variables: {}\n  \nmetadata\n  document-css: false\n  link-citations: true\n  date-format: long\n  lang: en\n  editor: visual\n  theme:\n    - cosmo\n    - brand\n  title: Assessing the Population-level Impacts of the U.S. Pacific longline fleet on sea turtles\n  \n"]
+[1,"Output created: docs\\index.html\n\n"]
+[1,"Preparing to preview\n\r[1/1] about.qmd\n"]
+[1,"\n"]
+[1,"Watching files for changes\nBrowse at http://localhost:4543/\n"]
+[1,"GET: /\n"]
