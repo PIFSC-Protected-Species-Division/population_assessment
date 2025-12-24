@@ -2,8 +2,11 @@
 .Rhistory
 .RData
 .Ruserdata
+.population_assessment.Rproj
 
 /.quarto/
 
 _R_code/**/**/*.*
 _R_code/**/*.*
+.Rproj.user/
+.quarto/
