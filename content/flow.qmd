@@ -1,0 +1,39 @@
+---
+title: "flow"
+format: html
+---
+
+### Flow diagram (test)
+
+```{mermaid}
+flowchart TD
+    A[Top rectangle: click for Quarto] -->|Intermediate box| B(Rounded edges:Click for Google)
+    B --> C{Diamond shape}
+    C -->|A| D[Option 1]
+    C -->|B| E[Option 2]
+    C -->|C| F[Option 3]
+
+    click A "https://quarto.org" "Go to Quarto Docs"
+    click B "https://www.google.com" "Search Google"
+```
+
+```{mermaid}
+flowchart LR
+  A[Population size] --> B[No] & C[Yes]
+  B --> D[Direct data] & E[Indirect data]
+  D --> F[Nesting female counts]
+  E --> G[Nest counts]
+  G --> H[Perfect nest counts] & I[Imperfect nest counts]
+  I --> J[Nest count imputation]
+  
+  
+```
+
+
+
+
+
+
+
+
+

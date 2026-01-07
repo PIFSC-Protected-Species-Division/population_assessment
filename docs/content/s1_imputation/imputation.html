@@ -103,6 +103,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -150,8 +179,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Flow diagram</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/s1_imputation/imputation.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Nest imputation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/s2_retrospective/retro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Retrospective trend</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/s3_future/future.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Future projections</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/s4_take/take.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fishery take</span></a>
   </div>
 </li>
     </ul>
@@ -165,7 +218,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#load-libraries-functions-and-nest-count-data" id="toc-load-libraries-functions-and-nest-count-data" class="nav-link" data-scroll-target="#load-libraries-functions-and-nest-count-data">Load libraries, functions, and nest count data</a></li>
+  <li><a href="#imputing-monthly-nest-counts" id="toc-imputing-monthly-nest-counts" class="nav-link" data-scroll-target="#imputing-monthly-nest-counts">Imputing monthly nest counts</a></li>
+  <li><a href="#load-libraries-functions-and-nest-count-data" id="toc-load-libraries-functions-and-nest-count-data" class="nav-link" data-scroll-target="#load-libraries-functions-and-nest-count-data">Load libraries, functions, and nest count data</a>
+  <ul class="collapse">
+  <li><a href="#modeling-assumptions" id="toc-modeling-assumptions" class="nav-link" data-scroll-target="#modeling-assumptions">Modeling assumptions</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -194,6 +251,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="overview" class="level3">
 <h3 class="anchored" data-anchor-id="overview">Overview</h3>
 <p>This page of code explains and demonstrates how to get started with your population modeling by processing your raw data into imputed nest counts (no missing data). On this page, you can read in your data to process raw observations of nests, implement JAGS, and view a summary of the JAGS model.</p>
+</section>
+<section id="imputing-monthly-nest-counts" class="level3">
+<h3 class="anchored" data-anchor-id="imputing-monthly-nest-counts">Imputing monthly nest counts</h3>
+<p>Some months were missing from the leatherback dataset, so we used a Bayesian hierarchical model to impute the missing monthly nest counts. This assumes that the dataset contains observed nests, but these values do not fully capture the true number of nests, as not all nests were observed. The relationship between the monthly nest counts recorded on the beach in natural log space (<span class="math inline">\(\text{y}_{t,m}\)</span>) and the natural log of the true number of nests <span class="math inline">\(\text{X}_{t,m}\)</span> will be explained below:</p>
+<p>We model the natural logarithm (natural log) of monthly counts at a nesting beach as an auto-regressive model. <span class="math display">\[
+\text{u}_{t,m} = \text{s}_{t,m} + \text{X}_{t-1,m-1}
+\]</span> <span class="math inline">\(\text{u}_{t,m}\)</span> is the mean of the natural log of the true number of nests at time <span class="math inline">\(t\)</span> of month <span class="math inline">\(m\)</span>, <span class="math inline">\(\text{s}_{t,m}\)</span> is the “slope” parameter at time <span class="math inline">\(t\)</span>, which is defined by month (<span class="math inline">\(m\)</span> = 1 to 12). <span class="math inline">\(\text{X}_{t-1,m}\)</span> is the natural log of the true nest count at time <span class="math inline">\(t - 1\)</span>. While month index <span class="math inline">\(m\)</span> corresponds to sequential months in each nesting season (e.g.&nbsp;months 1 through 12), the time index starts at the first month of the time series and increases monthly throughout all years in the time series.</p>
+<p>The state-space <span class="math inline">\(\text{X}_{t,m}\)</span> is modeled with a normal distribution with the mean <span class="math inline">\(\text{u}_{t,m}\)</span> and standard deviation <span class="math inline">\(\sigma_X\)</span>, which was assumed to be constant over time. <span class="math display">\[
+\text{X}_{t,m} \text~N(\text{u}_{t,m},\sigma_X)
+\]</span> Observations <span class="math inline">\(\text{y}_{t,m}\)</span> are modeled with another normal distribution with standard deviation <span class="math inline">\(\sigma_y\)</span>. also assumed to be constant over time. <span class="math display">\[
+\text{y}_{t,m} \text~N(\text{X}_{t,m},\sigma_y)
+\]</span> The slope <span class="math inline">\(\text{s}_{t,m}\)</span> parameters are modeled with the discrete Fourier series y acknowledging the periodicity of nesting. For Jamursba Medi, a 12-month period captures the single summer peak in nesting, whereas the summer and winter peaks of nesting in Wermon are captured by a 6-month period. <span class="math display">\[
+\text{s}_{t,m} = \beta_1 * cos(2\pi(\frac{m}{period})) + \beta_2 * sin(2\pi(\frac{m}{period})
+\]</span> The two coefficients (<span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>) were estimated from the data. The annual number of nests for each season (April through March; <span class="math inline">\(X_T\)</span>) are computed as the sum of estimated true monthly log numbers of nests (<span class="math inline">\(\text{X}_{t,m}\)</span>), derived from imputed log observed nest counts (<span class="math inline">\(\text{y}_{t,m}\)</span>). <span class="math display">\[
+X_T = \sum{exp(\text{X}_{.,m}})
+\]</span> <span class="math inline">\(\text{X}_{.,m}\)</span> indicates all <span class="math inline">\(t\)</span> values from <span class="math inline">\(m\)</span> = 1 to <span class="math inline">\(m\)</span> = 12.</p>
+<p>Prior distributions for the parameters are not flat but with large uncertainties in the natural log space. Normal distributions with mean = 0 and variance = 1 are used for the two parameters for the Fourier discrete function (<span class="math inline">\(\beta_1, \beta_2\)</span>), whereas gamma distributions with the shape parameter = 2 and rate parameter = 0.5 are used for the standard deviation parameters for the process (<span class="math inline">\(\sigma_X\)</span>) and observation (<span class="math inline">\(\sigma_y\)</span>) models.</p>
 </section>
 <section id="load-libraries-functions-and-nest-count-data" class="level1">
 <h1>Load libraries, functions, and nest count data</h1>
@@ -237,8 +311,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>            n.keep.W <span class="ot">&lt;-</span> <span class="fu">length</span>(idx.W)</span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>            dt.W <span class="ot">&lt;-</span> idx.W[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(idx.W)] <span class="sc">-</span> idx.W[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(idx.W)<span class="sc">-</span><span class="dv">1</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="modeling-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-assumptions">Modeling assumptions</h3>
+<p>The true number of nests per month is distributed normally, where the monthly means can be modeled with a discrete Fourier series with a fixed annual frequency. In other words, the number of peaks within a year is constant over the years. The variance around the means is assumed constant over the years.</p>
+<p>We used an autoregressive model with a lag of one month (AR1 model) where the relationship between the numbers of nests in two months is modeled by the Fourier series. We assume this model sufficiently captures the cyclical nature of nesting throughout the year.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -7,6 +7,59 @@ format: html
 
 This page of code explains and demonstrates how to get started with your population modeling by processing your raw data into imputed nest counts (no missing data). On this page, you can read in your data to process raw observations of nests, implement JAGS, and view a summary of the JAGS model.
 
+### Imputing monthly nest counts
+
+Some months were missing from the leatherback dataset, so we used a
+Bayesian hierarchical model to impute the missing monthly nest counts.
+This assumes that the dataset contains observed nests, but these values
+do not fully capture the true number of nests, as not all nests were
+observed. The relationship between the monthly nest counts recorded on
+the beach in natural log space ($\text{y}_{t,m}$) and the natural log of
+the true number of nests $\text{X}_{t,m}$ will be explained below:
+
+We model the natural logarithm (natural log) of monthly counts at a
+nesting beach as an auto-regressive model. $$
+\text{u}_{t,m} = \text{s}_{t,m} + \text{X}_{t-1,m-1}
+$$ $\text{u}_{t,m}$ is the mean of the natural log of the true number of
+nests at time $t$ of month $m$, $\text{s}_{t,m}$ is the "slope"
+parameter at time $t$, which is defined by month ($m$ = 1 to 12).
+$\text{X}_{t-1,m}$ is the natural log of the true nest count at time
+$t - 1$. While month index $m$ corresponds to sequential months in each
+nesting season (e.g. months 1 through 12), the time index starts at the
+first month of the time series and increases monthly throughout all
+years in the time series.
+
+The state-space $\text{X}_{t,m}$ is modeled with a normal distribution
+with the mean $\text{u}_{t,m}$ and standard deviation $\sigma_X$, which
+was assumed to be constant over time. $$
+\text{X}_{t,m} \text~N(\text{u}_{t,m},\sigma_X)
+$$ Observations $\text{y}_{t,m}$ are modeled with another normal
+distribution with standard deviation $\sigma_y$. also assumed to be
+constant over time. $$
+\text{y}_{t,m} \text~N(\text{X}_{t,m},\sigma_y)
+$$ The slope $\text{s}_{t,m}$ parameters are modeled with the discrete
+Fourier series y acknowledging the periodicity of nesting. For Jamursba
+Medi, a 12-month period captures the single summer peak in nesting,
+whereas the summer and winter peaks of nesting in Wermon are captured by
+a 6-month period. $$
+\text{s}_{t,m} = \beta_1 * cos(2\pi(\frac{m}{period})) + \beta_2 * sin(2\pi(\frac{m}{period}) 
+$$ The two coefficients ($\beta_1$ and $\beta_2$) were estimated from
+the data. The annual number of nests for each season (April through
+March; $X_T$) are computed as the sum of estimated true monthly log
+numbers of nests ($\text{X}_{t,m}$), derived from imputed log observed
+nest counts ($\text{y}_{t,m}$). $$
+X_T = \sum{exp(\text{X}_{.,m}})
+$$ $\text{X}_{.,m}$ indicates all $t$ values from $m$ = 1 to $m$ = 12.
+
+Prior distributions for the parameters are not flat but with large
+uncertainties in the natural log space. Normal distributions with mean =
+0 and variance = 1 are used for the two parameters for the Fourier
+discrete function ($\beta_1, \beta_2$), whereas gamma distributions with
+the shape parameter = 2 and rate parameter = 0.5 are used for the
+standard deviation parameters for the process ($\sigma_X$) and
+observation ($\sigma_y$) models.
+
+
 # Load libraries, functions, and nest count data
 ```{r}
 #| eval: false
@@ -50,3 +103,9 @@ file.path <- main.folder
 			n.keep.W <- length(idx.W)
 			dt.W <- idx.W[2:length(idx.W)] - idx.W[1:(length(idx.W)-1)]
 ```
+
+### Modeling assumptions
+
+The true number of nests per month is distributed normally, where the monthly means can be modeled with a discrete Fourier series with a fixed annual frequency. In other words, the number of peaks within a year is constant over the years. The variance around the means is assumed constant over the years.
+
+We used an autoregressive model with a lag of one month (AR1 model) where the relationship between the numbers of nests in two months is modeled by the Fourier series. We assume this model sufficiently captures the cyclical nature of nesting throughout the year.

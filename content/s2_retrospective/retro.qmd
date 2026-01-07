@@ -1,0 +1,158 @@
+---
+title: "Retrospective trend analysis"
+format: html
+---
+
+Population growth rates are estimated using a stochastic
+density-independent exponential growth model applied to nest count data
+(Boyd et al. 2017[^1], Holmes et al. (2007)[^2]. $$
+N_j = \text{N}_{j-1}e^r
+$$ $N_j$ is the number of Annual Nesters in the year $j$, $r$ is the
+instantaneous population growth rate (i.e. long-term annual trend), and
+$e^r$ = $\lambda$ (i.e., "lambda", the finite rate of increase for the
+population).
+
+[^1]: Boyd, C., D. P. DeMaster, R. S. Waples, E. J. Ward, and B. L.
+    Taylor. 2017. Consistent extinction risk assessment under the US
+    Endangered Species Act. Conservation Letters 10:328-336.
+
+[^2]: Holmes EE, Sabo JL, Viscido SV, Fagan WF. 2007. A statistical
+    approach to quasi‐extinction forecasting. Ecology Letters.
+    10(12):1182-1198.
+
+This model is common for long-lived, slow-growing, late-maturing species
+such as sea turtles, whose populations have been depleted to relatively
+low levels. The assumption of density-independence could be evaluated in
+future by running a density-dependent model (e.g. Gompertz model), which
+would allow the population to reach carrying capacity at some point in
+the future.
+
+The data inputs to the model were the time series of Annual Nesters, or
+the number of females arriving on a beach to nest each year. These were
+derived from observed nest counts, by dividing each nest count by mean
+clutch frequency (i.e. the mean number of clutches per nesting female in
+a nesting season). This static conversion does not affect the estimation
+process, but puts results into management-relevant terms. The number of
+Annual Nesters summed across one remigration interval (i.e. the number
+of years between nesting events of the same female) yields a snapshot of
+the Total Nesters in the population.
+
+The trend estimates here are better interpreted as long-term annual
+trends in the number of nesters, rather than the true population growth
+rates. This is because the model relies exclusively on nest count data,
+nesters only represent a small portion of the total population that
+includes males and immature turtles of both sexes, and assuming true
+population growth rates would require the assumption of a stable age
+distribution, for which no data exists.
+
+The exponential growth rate was transformed into natural log space and
+solved for the population growth rate: $$
+ln(N_j) = ln(\text{N}_{j-1}) + r
+$$ $$
+r = ln(N_j) - ln(\text{N}_{j-1})
+$$ Following Boyd et al. (2017)[^3], we construct a Bayesian state-space
+model (BSSM) from the natural log version of the exponential population
+growth equation. The BSSM allows for estimation of process variation
+(i.e., environmental and demographic variability) and observation
+uncertainty (i.e., imperfect data collection) and provides posterior
+distributions (i.e., parameter estimates with probability distributions)
+which are useful for conveying uncertainty in management applications.
+
+[^3]: Boyd, C., D. P. DeMaster, R. S. Waples, E. J. Ward, and B. L.
+    Taylor. 2017. Consistent extinction risk assessment under the US
+    Endangered Species Act. Conservation Letters 10:328-336.
+
+There are two major components of the BSSM: the process model describing
+the true number of nesting females each year, and the observation model
+relating the observed count data to the true number of nesting females.
+Three parameters are estimated: $r$, the instantaneous population growth
+rate, $Q$, the process error variance, and $R$, the observation error
+variance. The model also provides a predicted count with a probability
+distribution for each year of observed data. The predicted value for the
+final year of observed data is then used as a starting point for future
+projections.
+
+$$
+\text{Process equation:}\quad {T_j = \text{T}_{j-1} + r + p_j} \quad \text{where}\; p_j \,\text ~\, N(0,Q)
+$$ Where $T_j$ is the natural log of the true number of annual nesters
+in year $j$, $r$ is the instantaneous population growth rate, $p_j$ is
+the process error at year $j$, and $Q$ is the state process (time
+invariant). The true state variable, $T_j$ is not directly measured for
+the MP loggerheads nor WP leatherbacks. Instead, nest counts are
+observed on multiple beaches for each population, and the resulting time
+series come with various forms of observation uncertainty (i.e., missed
+nests or falsely identified nests). The relationship between the
+observed data and the corresponding number of true Annual Nesters is
+defined by a second equation: $$
+\text{Observation equation:}\quad {B_j = T_j + o_j} \quad \text{where}\; o_j \,\text ~\, N(0,R)
+$$ where $B_j$ is the natural log of the observed nesters, $o_j$ is the
+observation error at year $j$, and $R$ is the variance of the
+observation process (time invariant).
+
+For both NP loggerheads and WP leatherbacks, we define the model to only
+have one population with multiple time series of observations (i.e.,
+multiple beaches).This structure best represents the known population
+dynamics of genetic similarity and exchange of individuals across the
+studied beaches.
+
+However, the basic model can be expanded to accommodate multiple state
+vectors, representing several populations and multiple time series
+(Hinrichsen and Holmes 2009[^4]): $$
+\text{Process equation:}\quad {T_j = \text{T}_{j-1} + r + p_j} \quad \text{where}\; p_j \,\text ~\, MVN(0,Q_j)
+$$ $$
+\text{Observation equation:}\quad {B_j = Z +T_j + a + o_j} \quad \text{where}\; o_j \,\text ~\, MVN(0,R_j)
+$$ where $Q_j$ is the process variance-covariance matrix, $R_j$ is the
+observation variance-covariance matrix, $Z$ is a matrix that maps sets
+of time series to the set of state vectors, and $a$ is a vector of
+scaling parameters. The multivariate setting would allow the analysis of
+each time series as an individual population.
+
+[^4]: Hinrichsen R, Holmes EE. 2009. Using multivariate state-space
+    models to study spatial structure and dynamics. Spatial
+    Ecology.145-166.
+
+Posterior distributions of the model parameters are numerically derived
+using Markov chain Monte Carlo (MCMC) simulation in JAGS (Plummer,
+2003[^5]; 2017[^6]).The MCMC simulations are based on 10,000 samples of
+2 chains. Every other sample was retained to reduce auto-correlation,
+and the first 1000 samples of each chain were discarded as burn-in.
+
+[^5]: Plummer M. 2003. Jags: A program for analysis of bayesian
+    graphical models using Gibbs sampling. Proceedings of the 3rd
+    international workshop on distributed statistical computing. Vienna,
+    Austria.
+
+[^6]: Plummer M. 2017. Jags version 4.3.0 user manual.
+    http://mcmc-jagssourceforgenet/.
+
+From the model outputs, we are most interested in $r$, the annual
+population growth rate, $Q$, the process variance, and
+$\text{T}_{final}$, the estimated true log Annual Nesters for the final
+year of observed data. Posterior distributions of Annual Nesters for the
+final found years of data are used to estimate current abundance: $$
+\text{N}_{current} = \frac{RI * (e^{\text{T}_{final}})+(e^{\text{T}_{final-1}})+(e^{\text{T}_{final-2}})+(e^{\text{T}_{final-3}})}{4}
+$$ where $RI$ is the remigration interval for the population and
+$\text{N}_{final}$ is the median Annual Nesters estimated for the final
+year of data, $\text{N}_{final-1}$ is for the second to final year of
+data, and so on. This serves as a snapshot of Total Reproductive Females
+in the population, and assumes no mortaily of adults females during the
+$RI$ period.
+
+
+### Modeling assumptions
+
+The proportion of total nests observed on a given beach is constant through time.
+
+The time series of observed number of annual nesters are representative of the populations, as are the population growth rates observed for nesters. Note that index beaches are typically identified for long-term monitoring because they represent the population well.
+
+The clutch frequency is constant through time.
+
+The population growth rate is density-independent for each species (i.e., no carrying capacity or Allee effects in the timeframe considered).
+
+The population growth rate is the same across the different beaches for each species (i.e., there is a single biological process resulting in a single trend).
+
+The process and observation variances are estimable (with so few beaches, the prior has a lot of influence).
+
+The index beaches in both Japan and Indonesia were observed with constant effort or were effort-corrected by the data collectors prior to being provided to PIFSC to form the time series used in these analyses.
+
+The remigration interval is constant through time.

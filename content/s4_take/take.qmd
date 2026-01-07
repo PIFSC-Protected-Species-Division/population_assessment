@@ -1,0 +1,135 @@
+---
+title: "Fishery take"
+format: html
+---
+
+### Incorporating fishery interactions into the model
+
+In principle, the incorporation of fisheries interactions into the PVA
+projections is simple: during the calculation of the number of females
+in the next time step ($\text{N}_{j+1}$), the number of females in the
+current time step ($N_j$) is reduced by the incidental take in the
+current time step ($F_j$) and multiplied by the finite population growth
+rate ($\lambda$, = $e^r$). $$
+\text{N}_{j+1} = (N_j - F_j) * e^r
+$$ Therefore, the challenge comes from converting the incidental take of
+a given species (comprised of various lengths, ages, life stages, and
+sexes) to adult nester equivalents (ANE).
+
+**1. Predicting anticipated take levels:** The first goal is to generate
+the number and characteristics of the anticipated turtles that will be
+taken in each year. The number of turtles is referred to as the
+anticipated take level (ATL). Each year's ATL was drawn from a
+Conway-Maxwell Poisson distribution (CMP), a two-parameter version of
+the Poisson distributions that includes a scale parameter $\nu$.
+$\mu_{s,j}$ is the mean of the CMP distribution, and $s$ is one of three
+within-year segments which are summed to produce the total annual ATL
+(McCracken 2018[^7]). $$
+\text{ATL}_{j} \; \text~ \sum^{3}_{s=1}{CMP(\mu_{s,j},\nu_{s,j})}
+$$ Each individual in the annual ATL receives (1) a length and fishery
+mortality from a bivariate normal distribution, (2) a back-calculated
+age with years until maturity based on a von Bertalanffy growth model,
+(3) juvenile survival rate, (4) sex, and (5) a remigration interval.
+
+[^7]: McCracken ML. 2018. Hawaii permitted shallow-set longline fishery
+    estimated anticipated take level for Endangered Species Act listed
+    species. In: NOAA Fisheries Pacific Islands Science Center, editor.
+    Honolulu, HI USA
+
+**2. Lengths and fishery mortality.** Based on historic incidental take,
+a bivariate normal distribution is used to generate lengths in
+logarithmic space and assign fishery mortality in logit space.
+$\theta_{L,j}$ is a linear function of the annual incidental take
+($F_j$) with intercept $a_0$ and slope $a_1$, and $\sum$ is the
+variance-covariance matrix with variances $\sigma_L^2$ and $\sigma_D^2$
+for the log lengths (log($L_k$)) and logit assigned fishery mortality
+(logit($D_k$)) to have correlated draws. The parameters of the
+multivariate normal distribution
+($a_0, a_1, \sigma_L, \sigma_D, \rho_{L,D}$) are solved for in a
+Bayesian framework using STAN via RStan with 7,500 simulations per chain
+(5,000 burn-in, 2,500 retained) with 4 chains. $$
+\left( \frac{log(L_k)}{logit(D_k)} \right) \;\text~MVN\left(\frac{\theta_{L,j}}{\theta_D},\;\scriptstyle\sum\;\right)
+$$ $$
+\theta_{L,j} = a_0 + a_1F_j
+$$
+
+$$
+\scriptstyle\sum = \left[\frac {\sigma_L^2}{}{\rho_{L,d}{}} \right]
+$$ $$
+\Sigma = \begin{pmatrix}
+\mathrm{\sigma_L^2} & \mathrm{{\rho_{L,D}}{\sigma_{L}{\sigma_{D}} \\
+\mathrm{{\rho_{L,D}}{\sigma_L}{\sigma_D}} & \mathrm{\sigma_D^2}
+\end{pmatrix}
+$$
+
+**3. Age and stage.** From all lengths of historically taken turtles, a
+von Bertalanffy growth model (VBGM) is used to calculate the expected
+length at age across the range of lengths for each species. Using the
+VBGM for each species, the age at maturity ($A_{mat}$) was assumed to
+correspond to a length of 97.5% of the maximum asymptotic maximum length
+($L_\infty$). Turtles with ages less than $A_{mat}$ or lengths less than
+97.5% of ($L_\infty$) are considered immature. Years until maturity are
+calculated for all turtles as $Y_k = A_{mat} - {A_k}$, where $A_k$ is
+the age of the $k$th individual.
+
+**4. Remigration interval, juvenile survival, and sex.** In
+deterministic runs, each individual in the anticipated take is assigned
+the mean remigration interval ($RI$) and the mean juvenile survival
+($\phi$). In stochastic runs, each individual's $RI$ is drawn from a
+distribution (CMP for leatherbacks, truncated normal for loggerheads)
+and their juvenile survival is drawn from a normal distribution. The sex
+of each animal is drawn from a Bernoulli distribution for the
+probability of being female.
+
+**5. ANE calculation.** Adults in the anticipated take are given ANEs
+of 1. Juvenile ANEs are calculated by projecting the juvenile survival
+over the number of years to maturity, and dividing by remigration
+interval. The stochastic nature of sex ratio and fishery mortality are
+applied to adjust the individual ANE. The probability of an individual
+taken by a fishery dying is used with a Bernoulli distribution to
+simulate whether an individual dies. Therefore, the ANE of the $k$th
+individual is computed such that when the individual was a juvenile,
+female, and ended up dying, ANE was defined as the first equation below.
+However, when the individual was adult and either male or ends up alive,
+the ANE equals 0.
+
+$$
+ANE_k = \frac{\phi_J^{Y_k}}{RI}
+$$ $$
+ANE_{realized,k} = \{{{\frac{\phi_J^{Y_k}}{RI}, Stage = J}\atop{1 \times Sex \times Discard, Stage = A}}
+$$ **5. Historical ANE imputation.** To account for the historical
+impact on the population growth rates, ANE is also calculated
+historically. Each turtle's length is used to generate a likely age,
+stage, and years to maturity. Juveniles' years to maturity are rounded
+to the nearest year, and adults are assumed to be nesting in the year of
+their fishery interaction. $Y_F$ is the year incidental take occurred,
+$Y_k$ is the yeras to maturity, RI is the remigration interval (rounded
+to 3 years). The survival probability between each nesting year has to
+be accounted for so that the initial ANE is adjusted, where $\phi_J$ and
+$\phi_A$ are juvenile and adult survival rates, $PF$ is the proportion
+females, and $D$ is the assigned fishery mortality. $$
+Y_{nest,k} = \{{{Y_F+Y_k, y=1}\atop{Y_{nest,k}-1+RI, y>1}}
+$$ $$
+ANE_{k,j} = \{{{{\phi_J^{Nest_1}}\times{PF} \times D_k, y = 1}\atop{{\phi_A^{RI}, y>1}}}
+$$ **6. Take calculation.** After converting all individuals to ANEs,
+take ($F_j$) from the earlier equation is substituted out for the
+summation of the individual ANEs in a given year. To account to process
+variance $Q$ from the trend analysis, the first equation below is
+modified to draw $N_{j+1}$ from a normal distribution. The modified
+population growth model presented below is used as the basis for the
+future projections described above to produce future scenarios with take
+incorporated. $$
+\text{N}_{j+1} = (N_j - ANE_{realized,j}) * e^r
+$$ $$
+\text{N}_{j+1} = N((N_j - ANE_{realized,j}) * e^r, Q)
+$$
+
+### Modeling assumptions 
+
+The anticipated take level (ATL) is constant through time and independent of fishery effort. This assumption was made by McCracken (2018) when generating the ATLs for the fishery.
+
+The distribution of turtles’ sizes and post-interaction mortalities in the past is representative of what will be encountered in the future. We make this assumption when we use the fisheries observer data to inform characteristics of future turtles taken by the fishery, and do so because these are the best available data for the task.
+
+The life history parameters are indicative of the populations of interest and are estimated accurately. Specifically, Amat(age at maturity) is 0.975 of Linf (asymptotic length; average length of mature females).
+
+Turtles will nest immediately once they reach maturity.

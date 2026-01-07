@@ -11,8 +11,16 @@ website:
         text: "Home"
       - href: content/intro.qmd
         text: "Methods Introduction"
+      - href: content/flow.qmd
+        text: "Flow diagram"
       - href: content/s1_imputation/imputation.qmd
         text: "Nest imputation"
+      - href: content/s2_retrospective/retro.qmd
+        text: "Retrospective trend"
+      - href: content/s3_future/future.qmd
+        text: "Future projections"
+      - href: content/s4_take/take.qmd
+        text: "Fishery take"
 
 format:
   html:

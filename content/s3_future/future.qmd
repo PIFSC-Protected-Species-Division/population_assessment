@@ -1,0 +1,29 @@
+---
+title: "Future projections"
+format: html
+---
+
+PVA projections use a simulation approach with 10,000 runs for each
+species. Each projection is initialized in its starting year with a
+paired draw from the MCMC samples (joint posterior distribution) for (1)
+Annual Nesters ($N_0$ = $\text{N}_{final}$), (2) instantaneous
+population growth rate ($r$), (3) process error variance ($Q$) from the
+final data year of the historic trend analysis. For each subsequent year
+in the projection, a new $r$ and $Q$ are drawn as pairs from the MCMC
+samples to make the projections dynamic. Pulling paired draws from the
+MCMC samples reflects the inter-annual variation in the biology of the
+species, but also constrains parameter values to realistic combinations
+and therefore keeps the uncertainty in the projections reasonable.
+
+Projections can be evaluated against abundance thresholds. Here, the
+probability of falling below 50%, 25%, and 12.5% of current population
+size ($N_0$) is calculated at 5, 10, 25, 50, and 100-year time steps by
+summing the number of projections below the thresholds at the given time
+step and dividing by the total number of projections (10,000). Mean,
+median, and 95% confidence limits of number of years to reach the
+threshold are calculated for simulations that fall below a given
+population threshold, and the 100-year timestep simulation.
+
+### Modeling assumptions
+
+The population will face the same threats in the future as it did in the past. The PVA applies the population growth rate from the past, which was influenced by some particular magnitude of threats, to the future trajectory of the population. It does not account for the impacts of new or increasing threats, such as the loss of nesting habitat from climate change.

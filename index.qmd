@@ -1,5 +1,5 @@
 ---
-title: "Assessing the Population-level Impacts of the U.S. Pacific longline fleet on sea turtles"
+title: "Assessing the population-level impacts of the U.S. Pacific longline fleet on sea turtles"
 format: html
 editor: visual
 ---
