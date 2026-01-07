@@ -199,7 +199,7 @@
     "href": "content/flow.html",
     "title": "flow",
     "section": "",
-    "text": "Flow diagram (test)\n\n\n\n\n\nflowchart TD\n    A[Top rectangle: click for Quarto] --&gt;|Intermediate box| B(Rounded edges:Click for Google)\n    B --&gt; C{Diamond shape}\n    C --&gt;|A| D[Option 1]\n    C --&gt;|B| E[Option 2]\n    C --&gt;|C| F[Option 3]\n\n    click A \"https://quarto.org\" \"Go to Quarto Docs\"\n    click B \"https://www.google.com\" \"Search Google\"\n\n\n\n\n\n\n\n\n\n\n\nflowchart LR\n  A[Population size] --&gt; B[No] & C[Yes]\n  B --&gt; D[Direct data] & E[Indirect data]\n  D --&gt; F[Nesting female counts]\n  E --&gt; G[Nest counts]\n  G --&gt; H[Perfect nest counts] & I[Imperfect nest counts]\n  I --&gt; J[Nest count imputation]",
+    "text": "Flow diagram (test)\n\n\n\n\n\nflowchart LR\n  A[Population size] --&gt; B[No] & C[Yes]\n  B --&gt; D[Direct data] & E[Indirect data]\n  D --&gt; F[Nesting female counts]\n  E --&gt; G[Nest counts]\n  G --&gt; H[Perfect nest counts] & I[Imperfect nest counts]\n  I --&gt; J[Nest count imputation]\n  \n click J \"https://pifsc-protected-species-division.github.io/population_assessment/content/s1_imputation/imputation.html\" \"Go to Nest Imputation\"",
     "crumbs": [
       "Flow diagram"
     ]

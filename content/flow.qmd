@@ -1,9 +1,9 @@
 ---
-title: "flow"
+title: "Flow diagram"
 format: html
 ---
 
-### Flow diagram (test)
+### Workflow
 
 ```{mermaid}
 flowchart LR
